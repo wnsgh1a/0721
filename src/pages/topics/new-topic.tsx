@@ -11,7 +11,7 @@ function NewTopic() {
             <div className="container">
                 <div className="w-full h-full flex flex-col p-6 gap-6">
                     {/* 토픽 제목 입력란 */}
-                    <Input placeholder="토픽 제목을 입력하세요." className="h-14 px-6 border-none !text-lg placeholder:text-lg" />
+                    <Input placeholder="토픽 제목을 입력하세요." className="h-16 px-6 border-none !text-lg placeholder:text-lg" />
                     <Separator />
                     <div className="w-full flex items-start gap-6">
                         <div className="w-[308px] min-w-[308px] flex flex-col gap-6">

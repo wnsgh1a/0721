@@ -1,6 +1,7 @@
 import "@blocknote/core/fonts/inter.css";
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
+import { ko } from "@blocknote/core/locales";
 import "@blocknote/mantine/style.css";
 
 // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
@@ -17,23 +18,15 @@ async function uploadFile(file: File) {
 
 function TextEditor() {
     // Creates a new editor instance.
+    const locale = ko;
     const editor = useCreateBlockNote({
-        initialContent: [
-            {
-                type: "paragraph",
-                content: "Welcome to this demo!",
+        dictionary: {
+            ...locale,
+            placeholders: {
+                ...locale.placeholders,
+                emptyDocument: "텍스트를 입력하거나 '/' 를 눌러 명령어를 실행하세요.",
             },
-            {
-                type: "paragraph",
-                content: "Upload an image using the button below",
-            },
-            {
-                type: "image",
-            },
-            {
-                type: "paragraph",
-            },
-        ],
+        },
         uploadFile,
     });
 
