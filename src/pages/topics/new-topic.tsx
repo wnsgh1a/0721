@@ -13,30 +13,26 @@ function NewTopic() {
     const [category, setCategory] = useState<string>(""); // 카테고리 상태 값
     const [thumbnail, setThumbnail] = useState<string | File | null>(null);
     // const [content, setContent] = useState<string | null>(null);
+
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-    // 파일 변경 감지 및 상위 컴포넌트로 전달
     const handleChangeFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.files);
         const file = event.target.files?.[0];
         setThumbnail(file ?? null);
-        // 동일 파일 선택 가능하도록 value 초기화
+
+        // 동일 파일 선택이 가능하므로 value 초기화
         event.target.value = "";
     };
-
-    // 3. 이미지 미리보기 렌더링
     const handleRenderPreview = () => {
-        console.log(thumbnail);
-
         if (typeof thumbnail === "string") {
-            return <img src={thumbnail} alt="thumbnail" className="w-full aspect-video object-cover border rounded-lg" />;
+            return <img src={thumbnail} alt="thumbnail" className="w-full aspect-video rounded-lg object-cover border" />;
         } else if (thumbnail instanceof File) {
-            return <img src={URL.createObjectURL(thumbnail)} alt="thumbnail" className="w-full aspect-video object-cover border rounded-lg" />;
+            return <img src={URL.createObjectURL(thumbnail)} alt="thumbnail" className="w-full aspect-video rounded-lg object-cover border" />;
         }
 
         return (
-            <div className="w-full flex items-center justify-center aspect-video border rounded-lg bg-card">
-                <Button variant={"ghost"} size={"icon"} onClick={() => fileInputRef.current?.click()}>
+            <div className="w-full flex items-center justify-center aspect-video bg-card rounded-lg">
+                <Button size={"icon"} variant={"ghost"} onClick={() => fileInputRef.current?.click()}>
                     <Image />
                 </Button>
             </div>
@@ -44,7 +40,7 @@ function NewTopic() {
     };
 
     const onSubmit = async () => {
-        const { data, error } = await supabase.from("topics").insert([{ title, category }]).select();
+        const { data, error } = await supabase.from("topics").insert([{ title, category, thumbnail }]).select();
     };
 
     return (
