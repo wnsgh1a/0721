@@ -1,5 +1,13 @@
+import { AppFooter, AppHeader } from "@/components/common";
+
 function NewTopic() {
-    return <div>NewTopic</div>;
+    return (
+        <div className="page">
+            <AppHeader />
+            <div className="container"></div>
+            <AppFooter />
+        </div>
+    );
 }
 
 export default NewTopic;
