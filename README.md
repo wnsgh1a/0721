@@ -26,6 +26,11 @@
 -   Select a table to reference to에서 users 선택
 -   auth.users 옵션에서 id(uuid) 선택 👉🏻 save 버튼 클릭
     <br />
--   Authentication 메뉴 선택 후 Sign In /Providers 메뉴 선택
+-   Authentication 메뉴 선택 후 Sign In / Providers 메뉴 선택
 -   하단의 Email 토글 선택 👉🏻 Confirm email 토글 해제
 -   공식문서 기반 회원가입(signUp), 로그인(signInWithPassword) 함수 사용하여 기능 개발 착수
+
+### Supabase 소셜 로그인 가이드
+
+-   구글 Google 로그인 (준비 중)
+-   카카오 Kakao 로그인 (준비 중)
