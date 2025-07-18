@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 import { AppFooter, AppHeader } from "./components/common";
@@ -8,6 +7,7 @@ import { TOPIC_CATEGORY } from "./constants/topic-category.constant";
 import { Button } from "./components/ui";
 import { ChevronDown, PencilLine } from "lucide-react";
 import supabase from "./lib/supabase";
+import { useEffect, useState } from "react";
 
 interface Topic {
     id: number;
@@ -24,8 +24,8 @@ function App() {
     const getTopics = async () => {
         const { data, error } = await supabase.from("topics").select("*");
 
-        if (data) setTopics(data); // => data의 length가 0일 경우에는, UI로 처리
-        else if (error) throw new Error("토픽 조회 중 알 수 없는 에러가 발생했습니다.");
+        console.log(error);
+        if (data) setTopics(data);
     };
 
     useEffect(() => {
@@ -68,11 +68,8 @@ function App() {
                             {/* 실제 HOT 토픽 카드 UI 영역 */}
                             <div className="grid grid-cols-4 gap-6">
                                 {topics.map((topic: Topic) => {
-                                    return <SkeletonHotTopic props={topic} />;
+                                    return <SkeletonHotTopic />;
                                 })}
-                                {/* <SkeletonHotTopic />
-                                <SkeletonHotTopic />
-                                <SkeletonHotTopic /> */}
                             </div>
                         </div>
                         {/* NEW 토픽 영역 */}
