@@ -1,10 +1,10 @@
+import { useNavigate } from "react-router";
 import { AppFooter, AppHeader } from "./components/common";
 import { SkeletonHotTopic, SkeletonNewTopic } from "./components/skeleton";
 import { TOPIC_CATEGORY } from "./constants/topic-category.constant";
 
 import { Button } from "./components/ui";
 import { ChevronDown, PencilLine } from "lucide-react";
-import { useNavigate } from "react-router";
 
 function App() {
     const navigate = useNavigate();

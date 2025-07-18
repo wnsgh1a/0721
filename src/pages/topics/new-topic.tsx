@@ -1,12 +1,14 @@
 import { useRef, useState } from "react";
 import supabase from "@/lib/supabase";
+import { v4 as uuidv4 } from "uuid";
 
 import { AppFooter, AppHeader } from "@/components/common";
 import { TextEditor } from "@/components/topics";
 
-import { Button, Input, Label, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, Separator, Skeleton } from "@/components/ui";
+import { Button, Input, Label, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, Separator } from "@/components/ui";
 import { ArrowLeft, Asterisk, Image, ImageOff, Rocket } from "lucide-react";
 import { CREATE_TOPIC_CATEGORY } from "@/constants/topic-category.constant";
+import { toast } from "sonner";
 
 function NewTopic() {
     const [title, setTitle] = useState<string>(""); // 토픽 제목 상태 값
@@ -40,7 +42,49 @@ function NewTopic() {
     };
 
     const onSubmit = async () => {
-        const { data, error } = await supabase.from("topics").insert([{ title, category, thumbnail }]).select();
+        let uploadedThumbnailUrl: string | null = null; // => 임시 저장일 경우에는 썸네일이 없어도 임시 저장 기능 구현은 가능해야 하기 때문에 타입 null을 허용한다.
+
+        if (!title || !category || !thumbnail) {
+            toast.error("제목, 카테고리, 썸네일, 콘텐츠는 필수 값입니다.");
+            return;
+        }
+
+        if (thumbnail instanceof File) {
+            const fileExt = thumbnail.name.split(".").pop();
+            const filePath = `topic_thumbnails/${uuidv4()}.${fileExt}`;
+
+            const { error } = await supabase.storage.from("files").upload(filePath, thumbnail, {
+                cacheControl: "3600",
+                upsert: false,
+            });
+
+            if (error) {
+                toast.error("파일 업로드에 실패했습니다.");
+                return;
+            }
+
+            const {
+                data: { publicUrl },
+            } = supabase.storage.from("files").getPublicUrl(filePath);
+
+            if (publicUrl) uploadedThumbnailUrl = publicUrl;
+            else throw new Error("Supabase Storage Public URL Error!");
+        } else if (typeof thumbnail === "string") {
+            // 이미 업로드된 이미지 URL
+            uploadedThumbnailUrl = thumbnail;
+        }
+
+        // return 받은 url을 thumbnail에 할당
+        const { error } = await supabase
+            .from("topics")
+            .insert([{ title, category, thumbnail: uploadedThumbnailUrl }])
+            .select();
+
+        if (error) {
+            toast.error("토픽 등록에 실패했습니다.");
+            return;
+        }
+        toast.success("토픽이 성공적으로 등록되었습니다!");
     };
 
     return (
